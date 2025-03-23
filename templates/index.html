@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Video</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 50px;
+        }
+        h2 {
+            color: #333;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        input[type="file"], input[type="text"] {
+            margin: 10px;
+            padding: 8px;
+            width: 80%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin-top: 20px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+    <script>
+        function validateFile(input) {
+            const allowedExtensions = ['mp4', 'avi', 'mov'];
+            const fileName = input.value;
+            const fileExt = fileName.split('.').pop().toLowerCase();
+
+            if (!allowedExtensions.includes(fileExt)) {
+                alert("❌ Only video files are allowed: MP4, AVI, MOV");
+                input.value = "";
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <h2>📤 Upload a Video for Processing</h2>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept="video/mp4, video/avi, video/mov" required onchange="validateFile(this)">
+        <button type="submit">📥 Upload Video</button>
+    </form>
+    
+    <h2>📥 Download Video via Link</h2>
+    <form action="{{ url_for('download_url') }}" method="post">
+        <input type="text" name="video_url" placeholder="Enter video link" required>
+        <button type="submit">Download Video</button>
+    </form>
+    
+    {% if filename %}
+    <div class="message">
+        ✅ Video uploaded: <b>{{ filename }}</b><br>
+        <a href="{{ url_for('process_video', filename=filename) }}">➡ Click here to continue</a>
+    </div>
+    {% endif %}
+    </body>
+    </html>
+    

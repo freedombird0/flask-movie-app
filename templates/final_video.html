@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 Final Video Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 40px;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 80%;
+            text-align: center;
+        }
+        .video-container {
+            margin: 20px 0;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>🎬 Final Video</h2>
+
+    <div class="container">
+        {% if video_filename %}
+            <p>✅ The final video is ready! You can watch it below:</p>
+            <div class="video-container">
+                <video controls width="640">
+                    <source src="{{ url_for('output_files', filename=video_filename) }}" type="video/mp4">
+                    Your browser does not support video playback.
+                </video>
+            </div>
+
+            <div class="buttons">
+                <a href="{{ url_for('output_files', filename=video_filename) }}" download>
+                    <button>📥 Download Video</button>
+                </a>
+
+                <a href="/">
+                    <button>🏠 Return to Home Page</button>
+                </a>
+            </div>
+        {% else %}
+            <p>❌ The final video was not found. Please ensure all steps are completed!</p>
+            <a href="/">
+                <button>🏠 Return to Home Page</button>
+            </a>
+        {% endif %}
+    </div>
+
+</body>
+</html>

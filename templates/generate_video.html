@@ -1,0 +1,75 @@
+import os
+import cv2
+import subprocess
+from moviepy.editor import AudioFileClip
+
+# Set required folders
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
+OUTPUT_FOLDER = os.path.join(BASE_DIR, "output")
+FRAMES_FOLDER = os.path.join(BASE_DIR, "frames")
+AUDIO_FOLDER = os.path.join(BASE_DIR, "audio")
+
+# Create folders if they don't already exist
+for folder in [UPLOAD_FOLDER, OUTPUT_FOLDER, FRAMES_FOLDER, AUDIO_FOLDER]:
+    os.makedirs(folder, exist_ok=True)
+
+def generate_video(filename):
+    video_path = os.path.join(UPLOAD_FOLDER, filename)
+    output_video = os.path.join(OUTPUT_FOLDER, "final_video.mp4")
+    audio_output = os.path.join(AUDIO_FOLDER, "translated_audio.mp3")
+
+    # 🔹 Ensure the translated audio file is available
+    if not os.path.exists(audio_output):
+        print("❌ Translated audio file not found! Please confirm that text-to-speech conversion was completed.")
+        return
+
+        # 🔹 Extract frames from the video
+        video = cv2.VideoCapture(video_path)
+        fps = video.get(cv2.CAP_PROP_FPS)
+        frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
+    
+        frame_interval = max(1, int(fps * 2))  # Capture a frame approximately every 2 seconds
+        frame_files = []
+    
+    for i in range(0, frame_count, frame_interval):
+        video.set(cv2.CAP_PROP_POS_FRAMES, i)
+        success, frame = video.read()
+        if success:
+            frame_filename = os.path.join(FRAMES_FOLDER, f'frame_{i}.jpg')
+            cv2.imwrite(frame_filename, frame)
+            frame_files.append(frame_filename)
+
+    video.release()
+
+    if not frame_files:
+    print("❌ No frames were extracted from the video!")
+    return
+
+    # 🔹 Creating a new video from frames
+    first_frame = cv2.imread(frame_files[0])
+    height, width, _ = first_frame.shape
+    video_writer = cv2.VideoWriter(output_video, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height))
+
+    for frame_file in frame_files:
+        frame = cv2.imread(frame_file)
+        video_writer.write(frame)
+
+    video_writer.release()
+
+    print("✅ Video created without audio successfully!")
+
+    # 🔹 Adjusting video duration to match the audio
+    audio_clip = AudioFileClip(audio_output)
+    final_output = os.path.join(OUTPUT_FOLDER, "final_video_with_audio.mp4")
+
+    subprocess.run([
+        "ffmpeg", "-y", "-i", output_video, "-i", audio_output, "-c:v", "libx264", 
+        "-c:a", "aac", "-b:a", "192k", "-shortest", final_output
+    ])
+
+    print("✅ Final video with audio created successfully!")
+
+if __name__ == "__main__":
+    filename = input("🎥 Enter the video filename from the 'uploads' folder: ")
+    generate_video(filename)

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 40px;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            max-width: 80%;
+            text-align: left;
+        }
+        .text-box {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: right;
+            direction: rtl;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        select {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>📋 Text Summary</h2>
+
+    <div class="container">
+        <div class="text-box">
+            <p>{{ summary }}</p>
+        </div>
+    
+        <form action="{{ url_for('translate_text', filename=filename) }}" method="post">
+            <label for="language">🌍 Select translation language:</label>
+            <select name="language" id="language" required>
+                <option value="ar">Arabic</option>
+                <option value="en">English</option>
+                <option value="fr">French</option>
+                <option value="de">German</option>
+                <option value="es">Spanish</option>
+            </select>
+            <button type="submit">🔄 Translate text</button>
+        </form>
+    
+        <div class="buttons">
+            <a href="/">
+                <button>🏠 Return to Home</button>
+            </a>
+        </div>
+    </div>
+    
+</body>
+</html>

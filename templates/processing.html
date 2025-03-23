@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing video...</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script>
+        setTimeout(function() {
+            window.location.href = "/results/{{ filename }}";
+        }, 3000); // Automatically redirect after 3 seconds
+    </script>
+</head>
+<body class="bg-light text-center">
+
+    <div class="container mt-5">
+        <h1 class="text-primary">⏳ Processing the video...</h1>
+        <p class="lead">Please wait while we analyze the video: <strong>{{ filename }}</strong></p>
+        
+        <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    
+        <p class="mt-3">📢 You will be redirected to the results page shortly...</p>
+    </div>
+        </div>
+
+</body>
+</html>
