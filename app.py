@@ -44,7 +44,7 @@ def download_url():
     }
 
     with YoutubeDL(ydl_opts) as ydl:
-        info_dict = ydl.extract_info(video_url, download=True)
+        info_dict = ydl.extract_info(video_url, Upload=True)
         filename = ydl.prepare_filename(info_dict)
         filename = os.path.basename(filename).replace(".webm", ".mp4").replace(".mkv", ".mp4")
 
